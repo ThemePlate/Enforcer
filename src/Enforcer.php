@@ -26,6 +26,21 @@ class Enforcer {
 
 	}
 
+
+	public function load( array $plugins ): void {
+
+		$this->storage = $plugins;
+
+	}
+
+
+	public function dump(): array {
+
+		return $this->storage;
+
+	}
+
+
 	public function register( string $environment, string $plugin ): void {
 
 		if ( empty( $this->storage[ $environment ] ) ) {
@@ -37,6 +52,7 @@ class Enforcer {
 		}
 
 	}
+
 
 	public function unregister( string $environment, string $plugin ): void {
 
