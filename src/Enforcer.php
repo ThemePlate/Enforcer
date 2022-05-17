@@ -19,7 +19,7 @@ class Enforcer {
 
 		$this->current_environment = wp_get_environment_type();
 
-		$this->storage[ $this->current_environment ] = array();
+		$this->storage = $this->initial_storage();
 
 		add_filter( 'option_active_plugins', array( $this, 'maybe_insert_plugins' ) );
 		add_filter( 'plugin_action_links', array( $this, 'maybe_hide_links' ), 10, 2 );
@@ -27,9 +27,16 @@ class Enforcer {
 	}
 
 
+	protected function initial_storage(): array {
+
+		return array( $this->current_environment => array() );
+
+	}
+
+
 	public function load( array $plugins ): void {
 
-		$this->storage = $plugins;
+		$this->storage = array_merge( $this->initial_storage(), $plugins );
 
 	}
 
