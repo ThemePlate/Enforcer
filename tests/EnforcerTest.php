@@ -7,7 +7,6 @@
 namespace Tests;
 
 use ThemePlate\Enforcer;
-use ThemePlate\Tester\Utils;
 use WP_UnitTestCase;
 
 class EnforcerTest extends WP_UnitTestCase {
@@ -18,7 +17,7 @@ class EnforcerTest extends WP_UnitTestCase {
 	}
 
 	public function test_initial_storage_has_current_environment_empty_list(): void {
-		$storage = Utils::get_inaccessible_property( $this->enforcer, 'storage' );
+		$storage = $this->enforcer->dump();
 		$wp_env  = wp_get_environment_type();
 
 		$this->assertIsArray( $storage );
@@ -37,7 +36,7 @@ class EnforcerTest extends WP_UnitTestCase {
 
 		$this->enforcer->register( $wanted_environment, $wanted_plugin );
 
-		$storage = Utils::get_inaccessible_property( $this->enforcer, 'storage' );
+		$storage = $this->enforcer->dump();
 		$wp_env  = wp_get_environment_type();
 
 		$this->assertArrayHasKey( $wanted_environment, $storage );
@@ -58,7 +57,7 @@ class EnforcerTest extends WP_UnitTestCase {
 		$this->enforcer->unregister( $wanted_environment, $wanted_plugin );
 		$this->test_initial_storage_has_current_environment_empty_list();
 
-		$storage = Utils::get_inaccessible_property( $this->enforcer, 'storage' );
+		$storage = $this->enforcer->dump();
 
 		$this->assertArrayNotHasKey( $wanted_environment, $storage );
 	}
@@ -79,7 +78,7 @@ class EnforcerTest extends WP_UnitTestCase {
 
 		$this->enforcer->unregister( $wanted_environment, $wanted_plugin );
 
-		$storage = Utils::get_inaccessible_property( $this->enforcer, 'storage' );
+		$storage = $this->enforcer->dump();
 		$wp_env  = wp_get_environment_type();
 
 		$this->assertSameSets(
@@ -107,9 +106,7 @@ class EnforcerTest extends WP_UnitTestCase {
 			'hard/hard.php',
 		);
 
-		foreach ( $wanted_plugins as $wanted_plugin ) {
-			$this->enforcer->register( $wanted_environment, $wanted_plugin );
-		}
+		$this->enforcer->load( array( $wanted_environment => $wanted_plugins ) );
 
 		if ( $is_empty ) {
 			$expected = array();
@@ -155,9 +152,9 @@ class EnforcerTest extends WP_UnitTestCase {
 			'delete'     => '',
 		);
 
-		foreach ( $wanted_plugins as $wanted_plugin ) {
-			$this->enforcer->register( $wanted_environment, $wanted_plugin );
+		$this->enforcer->load( array( $wanted_environment => $wanted_plugins ) );
 
+		foreach ( $wanted_plugins as $wanted_plugin ) {
 			$output = apply_filters( 'plugin_action_links', $actions, $wanted_plugin );
 
 			if ( $has_key ) {
