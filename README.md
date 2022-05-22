@@ -12,7 +12,6 @@ $enforcer->register( 'production', 'wordfence/wordfence.php' );
 
 
 // or register all in one go
-
 $plugins = array(
 	'local' => array(
 		'query-monitor/query-monitor.php',

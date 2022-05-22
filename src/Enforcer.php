@@ -12,7 +12,7 @@ namespace ThemePlate;
 class Enforcer {
 
 	private string $current_environment;
-	private array $storage = array();
+	private array $storage;
 
 
 	public function __construct() {
