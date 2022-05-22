@@ -21,6 +21,11 @@ class Enforcer {
 
 		$this->storage = $this->initial_storage();
 
+	}
+
+
+	public function init() {
+
 		add_filter( 'option_active_plugins', array( $this, 'maybe_insert_plugins' ) );
 		add_filter( 'plugin_action_links', array( $this, 'maybe_hide_links' ), 10, 2 );
 

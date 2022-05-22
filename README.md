@@ -23,4 +23,8 @@ $plugins = array(
 );
 
 $enforcer->load( $plugins );
+
+
+// set up the hooks
+add_action( 'init', array( $enforcer, 'init' ) );
 ```

@@ -14,6 +14,8 @@ class EnforcerTest extends WP_UnitTestCase {
 
 	protected function setUp(): void {
 		$this->enforcer = new Enforcer();
+
+		$this->enforcer->init();
 	}
 
 	public function test_initial_storage_has_current_environment_empty_list(): void {
@@ -28,6 +30,15 @@ class EnforcerTest extends WP_UnitTestCase {
 			),
 			$storage
 		);
+	}
+
+	public function test_firing_init_actually_add_hooks(): void {
+		$enforcer = new Enforcer();
+
+		$enforcer->init();
+
+		$this->assertSame( 10, has_filter( 'option_active_plugins', array( $enforcer, 'maybe_insert_plugins' ) ) );
+		$this->assertSame( 10, has_filter( 'plugin_action_links', array( $enforcer, 'maybe_hide_links' ) ) );
 	}
 
 	public function test_register_correctly_adds_to_wanted_environment_storage_list(): void {
