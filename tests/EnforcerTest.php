@@ -22,7 +22,6 @@ class EnforcerTest extends WP_UnitTestCase {
 		$storage = $this->enforcer->dump();
 		$wp_env  = wp_get_environment_type();
 
-		$this->assertIsArray( $storage );
 		$this->assertArrayHasKey( $wp_env, $storage );
 		$this->assertSameSets(
 			array(
@@ -119,11 +118,7 @@ class EnforcerTest extends WP_UnitTestCase {
 
 		$this->enforcer->load( array( $wanted_environment => $wanted_plugins ) );
 
-		if ( $is_empty ) {
-			$expected = array();
-		} else {
-			$expected = $wanted_plugins;
-		}
+		$expected = $is_empty ? array() : $wanted_plugins;
 
 		$this->assertSameSets(
 			$expected,
